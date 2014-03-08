@@ -16,7 +16,7 @@ import base64
 
 # Sukuriam connection kiekvienam thread
 def connect(thread_index):
-	cherrypy.thread_data.db = psycopg2.connect("host='10.220.0.196' dbname='pwaf_testing' user='pwaf_web' password='pwaf_web_pass'")
+	cherrypy.thread_data.db = psycopg2.connect("host='127.0.0.1' dbname='pwaf_testing' user='pwaf_web' password='pwaf_web_pass'")
 	cherrypy.thread_data.db.set_isolation_level(0)
 
 # Cherrypy startuoja connect su kiekvienu thread
