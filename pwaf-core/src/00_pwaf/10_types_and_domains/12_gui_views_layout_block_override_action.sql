@@ -18,5 +18,5 @@ END
 $body$
 ;
 
-ALTER DOMAIN pwaf.gui_views_layout_block_override_action OWNER TO pwaf;
+ALTER TYPE pwaf.gui_views_layout_block_override_action OWNER TO pwaf;
 --

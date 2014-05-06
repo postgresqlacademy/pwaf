@@ -13,5 +13,5 @@ END
 $body$
 ;
 
-ALTER DOMAIN pwaf.user_info OWNER TO pwaf;
+ALTER TYPE pwaf.user_info OWNER TO pwaf;
 --

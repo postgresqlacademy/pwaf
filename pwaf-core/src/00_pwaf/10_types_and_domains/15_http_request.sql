@@ -22,7 +22,7 @@ END
 $body$
 ;
 
-ALTER DOMAIN pwaf.http_request OWNER TO pwaf;
+ALTER TYPE pwaf.http_request OWNER TO pwaf;
 
 COMMENT ON TYPE pwaf.http_request IS 'Object of HTTP request. Carries request information, request unique ID, session information.';
 --

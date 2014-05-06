@@ -43,7 +43,7 @@ BEGIN
 	END IF;
 	
 	IF v_data IS NOT NULL THEN
-		v_data := '<script src="/asset/pwaf_app_admin/sys_tabontextarea.js" type="text/javascript"></script><form method="POST"><textarea style="width:100%;height:90%" name="data">'||v_data||'</textarea><input type="submit" value="OK" /></form>';
+		v_data := '<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.22.0/codemirror.css"><script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/3.22.0/codemirror.min.js" type="text/javascript"></script><form method="POST"><textarea style="width:100%;height:90%" name="data" id="data">'||v_data||'</textarea><input type="submit" value="OK" /></form><script>var editor = CodeMirror.fromTextArea($("#data").get(0), {mode: "text/javascript",styleActiveLine: true,lineNumbers: true,lineWrapping: true,extraKeys: {"Ctrl-Space": "autocomplete"}});</script>';
 		v_response := ('text/html;charset=utf-8'::pwaf.http_response_content_type,v_data,200,NULL)::pwaf.http_response;
 	ELSE
 		v_data := 'Not found.';

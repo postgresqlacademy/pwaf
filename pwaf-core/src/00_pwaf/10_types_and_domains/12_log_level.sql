@@ -16,5 +16,5 @@ END
 $body$
 ;
 
-ALTER DOMAIN pwaf.log_level OWNER TO pwaf;
+ALTER TYPE pwaf.log_level OWNER TO pwaf;
 --

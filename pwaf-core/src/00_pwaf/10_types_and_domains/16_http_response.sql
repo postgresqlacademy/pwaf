@@ -17,5 +17,5 @@ END
 $body$
 ;
 
-ALTER DOMAIN pwaf.http_response OWNER TO pwaf;
+ALTER TYPE pwaf.http_response OWNER TO pwaf;
 --
