@@ -1,0 +1,124 @@
+1. Update server / virtual environment
+
+# apt-get update; apt-get -y upgrade; 
+
+2. Install PostgreSQL server
+
+# apt-get -y install PostgreSQL
+
+2.1. Allow PostgreSQL server to be accessed from external IP (useful when administering database remotely)
+
+# nano /etc/PostgreSQL/9.1/main/PostgreSQL.conf
+
+Change this line:
+#listen_addresses = 'localhost'
+
+to this line:
+liste_addresses = '*'
+
+2.2. Allow access with password from remote IP
+
+# nano /etc/PostgreSQL/9.1/main/pg_hba.conf
+
+Add this line to the end of the file:
+host    all             all             0.0.0.0/0               md5
+
+Notice: This will allow to try to login to PostgreSQL server from any remote IP, you could add your specific IP instead of 0.0.0.0/0, but we prefer to manage access rights from the server firewall (such as iptable).
+
+2.3. Install PostgreSQL Contrib package that has xml2 and pgcrypto extensions for PostgreSQL
+
+# apt-get -y install postgresql-contrib
+
+2.3. Restart the PostgreSQL server to propagate changes
+
+# service PostgreSQL restart
+
+2.4. Add a superuser to your PostgreSQL database that you will be using to administer and setup database
+
+# su postgres
+$ createuser -s -P
+
+3. Install environment for Python based web connector
+
+# apt-get -y install python-setuptools
+
+# easy_install cherrypy
+
+# apt-get -y install python-psycopg2
+
+4. Install Git
+
+# apt-get -y install git
+
+5. Change from root user to your web application user (any user you want)
+
+# su webapp
+
+6. Download PWAF 
+
+$ cd ~
+$ git clone https://github.com/postgresqlacademy/pwaf
+
+7. Build and deploy PWAF
+
+$ cd ~/pwaf/pwaf-core/build
+$ ./build.sh
+
+cp ~/pwaf/pwaf-core/build/deploy.sh ~/deploy-localhost.sh
+
+7.1. Create pwaf deploy user using pgAdmin or command line tools 
+
+SQL: CREATE ROLE pwaf_deploy_role LOGIN ENCRYPTED PASSWORD 'md5ac073759e732173a25aed041c6946031' SUPERUSER INHERIT CREATEDB CREATEROLE REPLICATION;
+
+7.2. Create pwaf and pwaf_web user using pgAdmin or command line tools
+
+SQL: CREATE ROLE pwaf LOGIN NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;
+
+SQL: CREATE ROLE pwaf_web LOGIN ENCRYPTED PASSWORD 'md577327cd55d3004bd166ec760d4c7d0f4' NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;
+
+7.3. Create a database
+
+SQL: CREATE DATABASE your_database WITH OWNER = pwaf ENCODING = 'UTF8' TABLESPACE = pg_default LC_COLLATE = 'C' LC_CTYPE = 'C' CONNECTION LIMIT = -1;
+
+7.3.1. Remove public schema
+
+SQL: DROP SCHEMA public;
+
+7.4. Edit ~/deploy-localhost.sh values and run deployment
+
+$ nano ~/deploy-localhost.sh
+
+Change: 
+export PGDATABASE=pwaf_testing 
+
+to:
+export PGDATABASE=your_database
+
+Change:
+psql -f build.sql
+
+to:
+psql -f ~/pwaf/pwaf-core/build/build.sql
+
+7.4.1. Run deploy script
+
+$ ~/deploy-localhost.sh
+
+8. Run HTTP Conntector-application
+
+$ cp ~/pwaf/pwaf-http-connector/python-cherrypy/src/main.py ~/http-connector-local.py
+$ nano main.py
+
+Change:
+dbname='pwaf_testing' 
+
+to: 
+dbname='your_database'
+
+8.1. To run the HTTP conntector app from command line
+
+$ ~/http-connector-local.py
+
+or
+
+$ ./http-connector-local.py > http.log 2>&1 &
