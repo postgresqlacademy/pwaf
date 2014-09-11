@@ -19,8 +19,8 @@ BEGIN
 	IF array_length(in_request.path_for_controller,1) IS NOT NULL THEN
 		v_response := ('text/html;charset=utf-8'::pwaf.http_response_content_type,'',307,'{"Location: /pwaf_app_base/about"}')::pwaf.http_response;
 	ELSE
-		OPEN v_data FOR SELECT NULL;
-		SELECT pwaf.pub_view_render(in_request, 'about', NULL, 'About') INTO v_html;
+		OPEN v_data FOR SELECT * FROM pwaf.v_applications;
+		SELECT pwaf.pub_view_render(in_request, 'about', v_data, 'Welcome to PWAF') INTO v_html;
 		v_response := ('text/html;charset=utf-8'::pwaf.http_response_content_type,v_html,200,NULL)::pwaf.http_response;
 	END IF;
 

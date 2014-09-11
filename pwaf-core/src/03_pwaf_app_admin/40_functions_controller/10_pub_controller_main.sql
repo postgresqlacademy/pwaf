@@ -16,17 +16,27 @@ DECLARE
 BEGIN
 
 	
-	v_data := '<b>Create new:</b><ul>';
-	v_data := v_data||'<li><a href="#">App</a></li>';
-	v_data := v_data||'<li><a href="#">Asset</a></li>';
-	v_data := v_data||'<li><a href="#">Template</a></li>';
-	v_data := v_data||'<li><a href="#">User</a></li>';
+	v_data := '
+	<body style="margin:0;padding:0">
+	<h1>PWAF Admin Dashboard</h1>
+	<div></div>
+	<style>
+	.disabled{
+		color: #999;
+	}
+	</style>
+	';
+	v_data := v_data||'<b>Create new:</b><ul>';
+	v_data := v_data||'<li><a href="#" class="disabled">App</a></li>';
+	v_data := v_data||'<li><a href="#" class="disabled">App URL Controller</a></li>';
+	v_data := v_data||'<li><a href="#" class="disabled">Asset</a></li>';
+	v_data := v_data||'<li><a href="#" class="disabled">Template</a></li>';
+	v_data := v_data||'<li><a href="#" class="disabled">User</a></li>';
+
 	v_data := v_data||'</ul><b>Edit: </b><ul>';
-	v_data := v_data||'<li><a href="#">Asset</a></li>';
-	v_data := v_data||'<li><a href="#">Template</a></li>';
-	v_data := v_data||'...';
-	v_data := v_data||'...';
-	v_data := v_data||'...';
+	v_data := v_data||'<li><a href="/pwaf_app_admin/editor/asset/">Assets</a></li>';
+	v_data := v_data||'<li><a href="/pwaf_app_admin/editor/template/">Templates</a></li>';
+
 	v_data := v_data||'</ul>';
 
 	v_response := ('text/html;charset=utf-8'::pwaf.http_response_content_type,v_data,200,NULL)::pwaf.http_response;
