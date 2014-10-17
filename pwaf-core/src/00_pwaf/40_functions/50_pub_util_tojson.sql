@@ -32,13 +32,13 @@ BEGIN
 	FOR recordvar IN EXECUTE 'SELECT * FROM tmp'||v_tmp_id LOOP
 		
 		FOR _name, _attnum, _typcategory IN
-			SELECT a.attname, a.attnum, t.typcategory::text FROM pg_catalog.pg_attribute a, pg_catalog.pg_class c, pg_type t WHERE a.attrelid=c.oid AND t.oid=a.atttypid  AND c.relname='tmp'||v_tmp_id
+			SELECT a.attname, a.attnum, t.typcategory::text FROM pg_catalog.pg_attribute a, pg_catalog.pg_class c, pg_type t WHERE a.attrelid=c.oid AND t.oid=a.atttypid AND a.attname NOT IN ('tableoid','cmax','xmax','cmin','xmin','ctid')  AND c.relname='tmp'||v_tmp_id
 		LOOP
 			EXECUTE 'SELECT ' || quote_ident(_name) || '::text FROM tmp'||v_tmp_id||' LIMIT 1 OFFSET '||v_loop_count INTO _value USING recordvar;
 			IF _typcategory='N' THEN
 				_values := array_append(_values, '"'||quote_ident(_name)||'":'||_value||'');
 			ELSE
-				_values := array_append(_values, '"'||quote_ident(_name)||'":'||replace(_value,'"','\"')||'');
+				_values := array_append(_values, '"'||quote_ident(_name)||'":"'||replace(_value,'"','\"')||'"');
 			END IF;
 			
 			
