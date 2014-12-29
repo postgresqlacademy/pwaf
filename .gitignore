@@ -1,1 +1,3 @@
 pwaf-core/build/build_and_deploy_dev.bat
+pwaf-core/build/deploy_local.bat
+pwaf-core/build/build_and_deploy_local.bat
