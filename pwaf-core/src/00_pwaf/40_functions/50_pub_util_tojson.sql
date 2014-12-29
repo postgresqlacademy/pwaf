@@ -1,14 +1,14 @@
---
+﻿--
 CREATE OR REPLACE FUNCTION pwaf.pub_util_tojson(in_query pwaf.sql_query)
   RETURNS text AS
 $BODY$
 /**
  * @package PWAF
  * @author Karolis Strumskis (karolis@strumskis.com)
- * @copyright (C) 2013 postgresqlacademy.com and other contributors
+ * @copyright (C) 2013-2015 postgresqlacademy.com and other contributors
  * @license Licensed under the MIT License
  * 
- * @version 0.1
+ * @version 0.2
  */
 DECLARE
 	recordvar record;
@@ -24,34 +24,46 @@ DECLARE
 BEGIN
 	v_final_json := '';
 
-	SELECT round(random()*100000) INTO v_tmp_id;
-	
-	EXECUTE 'CREATE TEMP TABLE tmp'||v_tmp_id||' AS '||in_query;
+	-- check if postgresql version supports native json functions
 
-	v_loop_count:=0;
-	FOR recordvar IN EXECUTE 'SELECT * FROM tmp'||v_tmp_id LOOP
+	IF (SELECT setting::int>90200 FROM pg_catalog.pg_settings WHERE name='server_version_num') THEN
+
+		EXECUTE 'select array_to_json(array_agg(row_to_json(t)))::text from ('||in_query||') t' INTO v_final_json ;
+		v_final_json :='{"data":'||v_final_json||'}';
+
+	-- else use the old way
+	ELSE
+
+		SELECT round(random()*100000) INTO v_tmp_id;
 		
-		FOR _name, _attnum, _typcategory IN
-			SELECT a.attname, a.attnum, t.typcategory::text FROM pg_catalog.pg_attribute a, pg_catalog.pg_class c, pg_type t WHERE a.attrelid=c.oid AND t.oid=a.atttypid AND a.attname NOT IN ('tableoid','cmax','xmax','cmin','xmin','ctid')  AND c.relname='tmp'||v_tmp_id
-		LOOP
-			EXECUTE 'SELECT ' || quote_ident(_name) || '::text FROM tmp'||v_tmp_id||' LIMIT 1 OFFSET '||v_loop_count INTO _value USING recordvar;
-			IF _typcategory='N' THEN
-				_values := array_append(_values, '"'||quote_ident(_name)||'":'||_value||'');
-			ELSE
-				_values := array_append(_values, '"'||quote_ident(_name)||'":"'||replace(_value,'"','\"')||'"');
-			END IF;
+		EXECUTE 'CREATE TEMP TABLE tmp'||v_tmp_id||' AS '||in_query;
+
+		v_loop_count:=0;
+		FOR recordvar IN EXECUTE 'SELECT * FROM tmp'||v_tmp_id LOOP
 			
-			
+			FOR _name, _attnum, _typcategory IN
+				SELECT a.attname, a.attnum, t.typcategory::text FROM pg_catalog.pg_attribute a, pg_catalog.pg_class c, pg_type t WHERE a.attrelid=c.oid AND t.oid=a.atttypid AND a.attname NOT IN ('tableoid','cmax','xmax','cmin','xmin','ctid')  AND c.relname='tmp'||v_tmp_id
+			LOOP
+				EXECUTE 'SELECT ' || quote_ident(_name) || '::text FROM tmp'||v_tmp_id||' LIMIT 1 OFFSET '||v_loop_count INTO _value USING recordvar;
+				IF _typcategory='N' THEN
+					_values := array_append(_values, '"'||quote_ident(_name)||'":'||_value||'');
+				ELSE
+					_values := array_append(_values, '"'||quote_ident(_name)||'":"'||replace(_value,'"','\"')||'"');
+				END IF;
+				
+				
+			END LOOP;
+
+			v_row_json := array_append(v_row_json, '{'||array_to_string(_values,',')||'}');
+
+			v_loop_count:=v_loop_count+1;
 		END LOOP;
 
-		v_row_json := array_append(v_row_json, '{'||array_to_string(_values,',')||'}');
+		v_final_json := '{"data":['||array_to_string(v_row_json,',')||']}';
 
-		v_loop_count:=v_loop_count+1;
-	END LOOP;
+		EXECUTE 'DROP TABLE tmp'||v_tmp_id;
 
-	v_final_json := '{"data":['||array_to_string(v_row_json,',')||']}';
-
-	EXECUTE 'DROP TABLE tmp'||v_tmp_id;
+	END IF;
 
 	RETURN v_final_json;
 END;$BODY$
