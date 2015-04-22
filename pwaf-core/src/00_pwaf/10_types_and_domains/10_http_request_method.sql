@@ -8,8 +8,13 @@ BEGIN
     	
 
 		CREATE TYPE pwaf.http_request_method AS ENUM
-		   ('GET',
-		    'POST');
+		     ('GET',
+			    'POST',
+			    'DELETE',
+			    'PATCH',
+			    'PUT',
+			    'OPTIONS',
+			    'HEAD');
 
    	END IF;
 END

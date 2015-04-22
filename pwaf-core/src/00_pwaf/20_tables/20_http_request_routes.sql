@@ -27,6 +27,6 @@ BEGIN
 END
 $body$
 ;
-
+ALTER TABLE pwaf.http_request_routes ADD COLUMN method pwaf.http_request_method;
 ALTER TABLE pwaf.http_request_routes OWNER TO pwaf;
 --
