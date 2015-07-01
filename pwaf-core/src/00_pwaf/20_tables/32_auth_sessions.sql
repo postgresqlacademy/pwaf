@@ -6,7 +6,7 @@ BEGIN
 		SELECT 1 FROM pg_tables WHERE schemaname='pwaf' and tablename='auth_sessions'
 	) THEN
 
-		CREATE TABLE pwaf.auth_sessions
+		CREATE UNLOGGED TABLE pwaf.auth_sessions
 		(
 		  id pwaf.g_serial NOT NULL,
 		  user_id integer,
