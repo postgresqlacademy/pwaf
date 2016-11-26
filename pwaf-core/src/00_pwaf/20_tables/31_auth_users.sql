@@ -12,7 +12,7 @@ BEGIN
 		  user_name text NOT NULL,
 		  auth_type_id integer NOT NULL,
 		  password text,
-		  salt text DEFAULT pwaf.gen_salt('bf'::text, 8),
+		  salt text DEFAULT pwaf_extensions.gen_salt('bf'::text, 8),
 		  CONSTRAINT users_pkey PRIMARY KEY (id ),
 		  CONSTRAINT auth_type_fkey FOREIGN KEY (auth_type_id)
 		      REFERENCES pwaf.auth_types (id) MATCH SIMPLE

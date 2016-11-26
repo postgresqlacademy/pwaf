@@ -31,7 +31,7 @@ BEGIN
 		IF v_user_id IS NOT NULL AND v_auth_type = 'local/crypt-bf8' THEN
 
 			IF EXISTS(
-				SELECT 1 FROM pwaf.auth_users WHERE id = v_user_id AND password = pwaf.crypt(v_password, v_salt)
+				SELECT 1 FROM pwaf.auth_users WHERE id = v_user_id AND password = pwaf_extensions.crypt(v_password, v_salt)
 			) THEN
 				-- Success
 				UPDATE pwaf.auth_sessions SET user_id=v_user_id WHERE id=in_request.session_id;

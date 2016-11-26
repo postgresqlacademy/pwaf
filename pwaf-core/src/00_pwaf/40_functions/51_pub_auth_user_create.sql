@@ -16,11 +16,11 @@ DECLARE
 BEGIN
 	
 	SELECT nextval('pwaf.g_seq'::regclass) INTO v_id;
-	SELECT pwaf.gen_salt('bf'::text, 8) INTO v_salt;
+	SELECT pwaf_extensions.gen_salt('bf'::text, 8) INTO v_salt;
 	
 	INSERT INTO pwaf.auth_users(
             id, user_name, auth_type_id, password, salt)
-    VALUES (v_id, in_username, 1000000, pwaf.crypt(in_password, v_salt), v_salt);
+    VALUES (v_id, in_username, 1000000, pwaf_extensions.crypt(in_password, v_salt), v_salt);
 
 	RETURN v_id;
 	
