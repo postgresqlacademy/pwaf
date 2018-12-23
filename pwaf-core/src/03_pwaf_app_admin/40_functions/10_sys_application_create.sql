@@ -1,4 +1,4 @@
---
+---
 CREATE OR REPLACE FUNCTION pwaf_app_admin.sys_application_create(in_name text)
   RETURNS void AS
 $BODY$
@@ -159,3 +159,4 @@ END;$BODY$
   COST 100;
 ALTER FUNCTION pwaf_app_admin.sys_application_create(in_name text)
   OWNER TO pwaf;
+---

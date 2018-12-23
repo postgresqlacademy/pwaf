@@ -53,6 +53,15 @@ class App(object):
 		param_names = []
 		param_values = []
 		
+		if cherrypy.request.process_request_body:
+
+		    if 'Content-Length' in cherrypy.request.headers:
+			cl = cherrypy.request.headers['Content-Length']
+    			rawbody = cherrypy.request.body.read(int(cl))
+
+			param_names.append('Request-Payload')
+			param_values.append(base64.b64encode(rawbody.encode("utf-8")))
+
 		# encode and put GET/POST variable names into param_names and coresponding values to param_values
 		for i in range(len(params.items())):
 			param_names.append(params.items()[i][0]);
@@ -114,20 +123,34 @@ class App(object):
 	def handle_POST(self, *vpath, **params):
 		return self.handle_GET(*vpath,**params)
 
+	def handle_PUT(self, *vpath, **params):
+		return self.handle_GET(*vpath,**params)
+
+	def handle_PATCH(self, *vpath, **params):
+		return self.handle_GET(*vpath,**params)
+
+	def handle_OPTIONS(self, *vpath, **params):
+		return self.handle_GET(*vpath,**params)
+
+	def handle_DELETE(self, *vpath, **params):
+		return self.handle_GET(*vpath,**params)
+
 
 
 settings = {
 
 		'global': {
 			'server.socket_host': '0.0.0.0',
-			'server.socket_port': 8080,
+			'server.socket_port': 8081,
 			'server.thread_pool': 30,
 			'server.socket_queue_size': 10,
-			'log.screen': False,
+			'log.screen': True,
 			'tools.sessions.on': True,
 			'tools.sessions.timeout': 60,
 			'tools.encode.on': True,
-			'tools.encode.encoding': 'utf-8'
+			'tools.encode.encoding': 'utf-8',
+			'tools.gzip.on':True,
+			'tools.gzip.mime_types':['text/html','text/plain','text/css','text/javascript','application/json']
 		}
 
 }

@@ -47,3 +47,4 @@ END;$BODY$
   COST 100;
 ALTER FUNCTION pwaf_app_admin.sys_controller_create(in_schema text, in_controller_shortname text)
   OWNER TO pwaf;
+---

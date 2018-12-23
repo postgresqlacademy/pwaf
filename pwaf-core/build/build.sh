@@ -1,3 +1,3 @@
 #!/bin/bash
 
-find ../src/ -type f|sort|xargs cat > build.sql
+find ../src/ -type f ! -name ".DS_Store"|sort|xargs cat > build.sql

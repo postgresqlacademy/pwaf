@@ -6,4 +6,4 @@ export PGUSER=pwaf_deploy_role
 export PGPASSWORD=pwaf_deploy_pass
 export PGDATABASE=pwaf_testing
 
-psql -f build.sql
+psql --quiet -f build.sql

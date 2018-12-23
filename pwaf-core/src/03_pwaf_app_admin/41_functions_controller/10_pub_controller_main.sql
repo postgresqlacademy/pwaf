@@ -36,6 +36,7 @@ BEGIN
 	v_data := v_data||'</ul><b>Edit: </b><ul>';
 	v_data := v_data||'<li><a href="/pwaf_app_admin/editor/asset/">Assets</a></li>';
 	v_data := v_data||'<li><a href="/pwaf_app_admin/editor/template/">Templates</a></li>';
+	v_data := v_data||'<li><a href="/pwaf_app_admin/editor/function/">Functions</a></li>';
 
 	v_data := v_data||'</ul>';
 

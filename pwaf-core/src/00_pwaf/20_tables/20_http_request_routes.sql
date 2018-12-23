@@ -27,6 +27,20 @@ BEGIN
 END
 $body$
 ;
-ALTER TABLE pwaf.http_request_routes ADD COLUMN method pwaf.http_request_method;
+
+DO
+$body$
+BEGIN
+	IF NOT EXISTS (
+		SELECT 1 FROM information_schema.columns WHERE table_catalog=current_database() and table_schema='pwaf' and table_name='http_request_routes'
+	) THEN
+
+		ALTER TABLE pwaf.http_request_routes ADD COLUMN method pwaf.http_request_method;
+
+	END IF;
+END
+$body$
+;
+
 ALTER TABLE pwaf.http_request_routes OWNER TO pwaf;
 --
