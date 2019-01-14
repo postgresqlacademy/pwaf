@@ -1,7 +1,8 @@
 pwaf
 ====
-
 PostgreSQL Web Application Framework
+
+Note: This project was initiated some time ago and now is being refactored, reworked and finalized to be production ready.
 
 Currently in alpha/nightly build version.
 
