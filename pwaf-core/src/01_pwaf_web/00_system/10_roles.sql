@@ -2,9 +2,7 @@
 DO
 $body$
 BEGIN
-	IF NOT EXISTS (
-   		SELECT 1 FROM pg_catalog.pg_user WHERE usename = 'pwaf_web'
-   	) THEN
+   	IF NOT pwaf.build_utils_check_role_exists('pwaf_web') THEN
 
       CREATE ROLE pwaf_web LOGIN NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION PASSWORD 'pwaf_web_pass';
 

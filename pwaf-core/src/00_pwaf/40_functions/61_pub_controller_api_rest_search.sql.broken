@@ -128,6 +128,8 @@ BEGIN
 	
 	ELSE
 
+		RETURN NULL:
+
 		---
 
 	END IF;

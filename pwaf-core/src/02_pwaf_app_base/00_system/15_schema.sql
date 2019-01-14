@@ -2,9 +2,7 @@
 DO
 $body$
 BEGIN
-	IF NOT EXISTS (
-    	SELECT 1 FROM information_schema.schemata WHERE schema_name = 'pwaf_app_base'
-    ) THEN
+   	IF NOT pwaf.build_utils_check_schema_exists('pwaf_app_base') THEN
 
     	CREATE SCHEMA pwaf_app_base AUTHORIZATION pwaf;
     	

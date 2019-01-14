@@ -1,11 +1,11 @@
 --
-CREATE OR REPLACE FUNCTION pwaf.pub_view_render(in_request pwaf.http_request, in_view_code pwaf.code, in_data_refcursor refcursor, in_title text)
+CREATE OR REPLACE FUNCTION pwaf.pub_view_render(in_request pwaf.http_request, in_view_code pwaf.code, in_data_refcursor refcursor, in_custom_variables pwaf.key_value[])
   RETURNS pwaf.html AS
 $BODY$
 /**
  * @package PWAF
  * @author Karolis Strumskis (karolis@strumskis.com)
- * @copyright (C) 2013 postgresqlacademy.com and other contributors
+ * @copyright (C) 2019 postgresqlacademy.com and other contributors
  * @license Licensed under the MIT License
  * 
  * @version 0.1
@@ -13,7 +13,6 @@ $BODY$
 DECLARE
 	v_view_html 	pwaf.html;
 	v_layout_html 	pwaf.html;
-	v_response 		pwaf.html;
 	v_template_code	pwaf.code;
 	v_layout_template_code	pwaf.code;
 	v_block			pwaf.v_gui_views_layout_block%rowtype;
@@ -47,7 +46,39 @@ BEGIN
 	SELECT pwaf.pub_html_render(v_layout_template_code, v_content_cur) INTO v_layout_html;
 	CLOSE v_content_cur;
 
-	v_response:= replace(v_layout_html,'${title}',in_title);
+	FOR i IN 1 .. array_upper(in_custom_variables, 1)
+	LOOP
+	   v_layout_html:= replace(v_layout_html,'${'||in_custom_variables[i].key||'}',in_custom_variables[i].value);
+	END LOOP;
+	--
+
+	RETURN v_layout_html;
+END;$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION pwaf.pub_view_render(pwaf.http_request, pwaf.code, refcursor, pwaf.key_value[]) OWNER TO pwaf;
+--
+
+--
+CREATE OR REPLACE FUNCTION pwaf.pub_view_render(in_request pwaf.http_request, in_view_code pwaf.code, in_data_refcursor refcursor, in_title text)
+  RETURNS pwaf.html AS
+$BODY$
+/**
+ * @package PWAF
+ * @author Karolis Strumskis (karolis@strumskis.com)
+ * @copyright (C) 2013-2019 postgresqlacademy.com and other contributors
+ * @license Licensed under the MIT License
+ * 
+ * @version 0.1
+ */
+DECLARE
+	v_response 		pwaf.html;
+	v_custom_variables pwaf.key_value[] DEFAULT '{}';
+BEGIN
+
+	v_custom_variables := v_custom_variables || ('title',in_title)::pwaf.key_value;
+	
+	v_response := pwaf.pub_view_render(in_request, in_view_code, in_data_refcursor, v_custom_variables);
 
 	RETURN v_response;
 END;$BODY$

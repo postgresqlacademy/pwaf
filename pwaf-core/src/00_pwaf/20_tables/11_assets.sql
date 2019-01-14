@@ -2,9 +2,7 @@
 DO
 $body$
 BEGIN
-	IF NOT EXISTS (
-		SELECT 1 FROM pg_tables WHERE schemaname='pwaf' and tablename='assets'
-	) THEN
+	IF NOT pwaf.build_utils_check_table_exists('pwaf', 'assets') THEN
 
 		CREATE TABLE pwaf.assets
 		(

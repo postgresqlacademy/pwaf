@@ -5,7 +5,7 @@ $BODY$
 /**
  * @package PWAF
  * @author Karolis Strumskis (karolis@strumskis.com)
- * @copyright (C) 2011 postgresqlacademy.com and other contributors
+ * @copyright (C) 2011-2019 postgresqlacademy.com and other contributors
  * @license Licensed under the MIT License
  * 
  * @version 0.1
@@ -33,8 +33,7 @@ BEGIN
 
 END;$BODY$
 
-  LANGUAGE plpgsql VOLATILE SECURITY DEFINER
-  COST 100;
+LANGUAGE plpgsql VOLATILE SECURITY DEFINER;
 
 ALTER FUNCTION pwaf_web.http_request_handle(pwaf_web.http_request) OWNER TO pwaf;
 GRANT EXECUTE ON FUNCTION pwaf_web.http_request_handle(pwaf_web.http_request) TO pwaf_web;

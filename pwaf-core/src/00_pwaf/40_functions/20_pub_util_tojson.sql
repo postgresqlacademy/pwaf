@@ -5,7 +5,7 @@ $BODY$
 /**
  * @package PWAF
  * @author Karolis Strumskis (karolis@strumskis.com)
- * @copyright (C) 2013-2015 postgresqlacademy.com and other contributors
+ * @copyright (C) 2013-2019 postgresqlacademy.com and other contributors
  * @license Licensed under the MIT License
  * 
  * @version 0.2

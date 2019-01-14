@@ -114,7 +114,7 @@ BEGIN
 		v_json := pwaf.pub_http_request_param_get(in_request,'Request-Payload')::json;
 
 		--- create a record
-		v_new_key := pwaf.random_string(32);
+		v_new_key := pwaf.pub_util_random_string(32);
 
 		--- get column list
 		SELECT string_agg(column_name,',') INTO v_columns FROM information_schema.columns WHERE table_schema=(string_to_array(v_default_data_endpoint,'.'))[1] AND table_name=(string_to_array(v_default_data_endpoint,'.'))[2] AND column_name NOT IN ('id','key','created','modified','archived');
@@ -170,7 +170,7 @@ BEGIN
 		v_json := pwaf.pub_http_request_param_get(in_request,'Request-Payload')::json;
 
 		--- create a record
-		v_new_key := pwaf.random_string(32);
+		v_new_key := pwaf.pub_util_random_string(32);
 
 		--- get column list
 		SELECT string_agg(column_name,',') INTO v_columns FROM information_schema.columns WHERE table_schema=(string_to_array(v_child_default_data_endpoint,'.'))[1] AND table_name=(string_to_array(v_child_default_data_endpoint,'.'))[2] AND column_name NOT IN ('id','key','created','modified','archived');

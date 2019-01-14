@@ -3,11 +3,10 @@ DO
 $body$
 BEGIN
 	IF NOT EXISTS (
-    	SELECT 1 FROM pg_type JOIN pg_namespace ON typnamespace=pg_namespace.oid WHERE nspname='pwaf' AND typname='auth_security_tokens_id_seq'
+    	SELECT 1 FROM pg_type JOIN pg_namespace ON typnamespace=pg_namespace.oid WHERE nspname='pwaf' AND typname='security_oauth_tokens_id_seq'
     ) THEN
-    	
 
-		CREATE SEQUENCE pwaf.auth_security_tokens_id_seq
+		CREATE SEQUENCE pwaf.security_oauth_tokens_id_seq
 		  INCREMENT 1
 		  MINVALUE 1
 		  MAXVALUE 9223372036854775807
@@ -19,5 +18,5 @@ END
 $body$
 ;
 
-ALTER SEQUENCE pwaf.auth_security_tokens_id_seq OWNER TO pwaf;
+ALTER SEQUENCE pwaf.security_oauth_tokens_id_seq OWNER TO pwaf;
 --

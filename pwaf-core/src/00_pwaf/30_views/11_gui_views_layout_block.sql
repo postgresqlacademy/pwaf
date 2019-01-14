@@ -2,9 +2,7 @@
 DO
 $body$
 BEGIN
-	IF NOT EXISTS (
-		SELECT 1 FROM pg_views WHERE schemaname='pwaf' and viewname='v_gui_views_layout_block'
-	) THEN
+  IF NOT pwaf.build_utils_check_view_exists('pwaf', 'v_gui_views_layout_block') THEN
 
 		CREATE OR REPLACE VIEW pwaf.v_gui_views_layout_block AS 
         	SELECT 

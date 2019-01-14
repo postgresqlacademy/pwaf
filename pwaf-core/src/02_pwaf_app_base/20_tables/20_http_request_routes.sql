@@ -2,18 +2,13 @@
 DO
 $body$
 BEGIN
-	IF NOT EXISTS (
-		SELECT 1 FROM pg_tables WHERE schemaname='pwaf_app_base' and tablename='http_request_routes'
-	) THEN
+	IF NOT pwaf.build_utils_check_table_exists('pwaf_app_base', 'http_request_routes') THEN
 
 		CREATE TABLE pwaf_app_base.http_request_routes
 		(
 		  CONSTRAINT http_request_routes_pkey PRIMARY KEY (id)
 		)
-		INHERITS (pwaf.http_request_routes)
-		WITH (
-		  OIDS=FALSE
-		);
+		INHERITS (pwaf.http_request_routes);
 
 		CREATE INDEX http_request_routes_path_idx 
 			ON pwaf_app_base.http_request_routes

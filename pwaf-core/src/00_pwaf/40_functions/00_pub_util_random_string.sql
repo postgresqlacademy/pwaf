@@ -1,11 +1,11 @@
----
-CREATE OR REPLACE FUNCTION pwaf.sys_random_string(integer)
+--
+CREATE OR REPLACE FUNCTION pwaf.pub_util_random_string(integer)
   RETURNS text AS
 $BODY$
 /**
  * @package PWAF
  * @author Karolis Strumskis (karolis@strumskis.com)
- * @copyright (C) 2017 postgresqlacademy.com and other contributors
+ * @copyright (C) 2019 postgresqlacademy.com and other contributors
  * @license Licensed under the MIT License
  * 
  * @version 0.1
@@ -21,7 +21,6 @@ SELECT array_to_string(
     ''
 )
 $BODY$
-  LANGUAGE sql VOLATILE
-  COST 100;
-ALTER FUNCTION pwaf.sys_random_string(integer) OWNER TO pwaf;
----
+LANGUAGE sql VOLATILE;
+ALTER FUNCTION pwaf.pub_util_random_string(integer) OWNER TO pwaf;
+--

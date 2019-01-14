@@ -14,9 +14,13 @@ import cherrypy
 import psycopg2
 import base64
 
+import ConfigParser
+config = ConfigParser.ConfigParser()
+config.read("config.ini")
+
 # Sukuriam connection kiekvienam thread
 def connect(thread_index):
-	cherrypy.thread_data.db = psycopg2.connect("host='127.0.0.1' dbname='pwaf_testing' user='pwaf_web' password='pwaf_web_pass'")
+	cherrypy.thread_data.db = psycopg2.connect("host='"+config.get("db","host")+"' port="+config.get("db","port")+" dbname='"+config.get("db","database")+"' user='"+config.get("db","username")+"' password='"+config.get("db","password")+"'")
 	cherrypy.thread_data.db.set_isolation_level(0)
 
 # Cherrypy startuoja connect su kiekvienu thread
@@ -140,8 +144,8 @@ class App(object):
 settings = {
 
 		'global': {
-			'server.socket_host': '0.0.0.0',
-			'server.socket_port': 8081,
+			'server.socket_host': config.get("http_server","host"),
+			'server.socket_port': config.getint("http_server","port"),
 			'server.thread_pool': 30,
 			'server.socket_queue_size': 10,
 			'log.screen': True,

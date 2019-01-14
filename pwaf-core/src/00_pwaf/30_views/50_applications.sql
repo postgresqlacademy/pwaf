@@ -2,9 +2,7 @@
 DO
 $body$
 BEGIN
-	IF NOT EXISTS (
-		SELECT 1 FROM pg_views WHERE schemaname='pwaf' and viewname='v_applications'
-	) THEN
+	IF NOT pwaf.build_utils_check_view_exists('pwaf', 'v_applications') THEN
 
 		CREATE OR REPLACE VIEW pwaf.v_applications AS 
  			SELECT DISTINCT n.nspname as name,

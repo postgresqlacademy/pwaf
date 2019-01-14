@@ -1,11 +1,11 @@
 ---
-CREATE OR REPLACE FUNCTION pwaf.pub_auth_security_oauth2_token_generate(in_user_id bigint)
+CREATE OR REPLACE FUNCTION pwaf.pub_security_oauth2_token_generate(in_user_id bigint)
   RETURNS text AS
 $BODY$
 /**
  * @package PWAF
  * @author Karolis Strumskis (karolis@strumskis.com)
- * @copyright (C) 2013 postgresqlacademy.com and other contributors
+ * @copyright (C) 2013-2019 postgresqlacademy.com and other contributors
  * @license Licensed under the MIT License
  * 
  * @version 0.1
@@ -19,6 +19,6 @@ BEGIN
 END;$BODY$
   LANGUAGE plpgsql VOLATILE
   COST 100;
-ALTER FUNCTION pwaf.pub_auth_security_oauth2_token_generate(bigint)
+ALTER FUNCTION pwaf.pub_security_oauth2_token_generate(bigint)
   OWNER TO pwaf;
 ---

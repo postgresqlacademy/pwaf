@@ -1,11 +1,13 @@
 ---
-CREATE OR REPLACE FUNCTION pwaf.pub_controller_auth_security_oauth2_token(in_request pwaf.http_request)
-  RETURNS pwaf.http_response AS
+CREATE OR REPLACE FUNCTION pwaf.pub_controller_security_oauth2_token(
+	in_request pwaf.http_request
+)
+RETURNS pwaf.http_response AS
 $BODY$
 /**
  * @package PWAF
  * @author Karolis Strumskis (karolis@strumskis.com)
- * @copyright (C) 2013 postgresqlacademy.com and other contributors
+ * @copyright (C) 2013-2019 postgresqlacademy.com and other contributors
  * @license Licensed under the MIT License
  * 
  * @version 0.1
@@ -50,10 +52,10 @@ BEGIN
 
 	IF(v_grant_type='web_session' AND in_request.method!='OPTIONS'::pwaf.http_request_method) THEN
 
-		--SELECT user_id INTO v_user_id FROM pwaf.auth_sessions WHERE id=in_request.session_id;
-		SELECT user_id INTO v_user_id FROM pwaf.auth_sessions WHERE cookie=v_cookie_id;
+		--SELECT user_id INTO v_user_id FROM pwaf.security_sessions WHERE id=in_request.session_id;
+		SELECT user_id INTO v_user_id FROM pwaf.security_sessions WHERE cookie=v_cookie_id;
 		IF v_user_id>0 THEN
-			v_key := pwaf.pub_auth_security_oauth2_token_generate(v_user_id);
+			v_key := pwaf.pub_security_oauth2_token_generate(v_user_id);
 			RETURN ('application/json'::pwaf.http_response_content_type,'{"access_token":"'||v_key||'","expires_in":3600,"token_type":"bearer","scope":null}',200,v_headers)::pwaf.http_response;
 		END IF;
 		
@@ -62,8 +64,8 @@ BEGIN
 	RETURN ('application/json'::pwaf.http_response_content_type,'{"status": "error"}',200,v_headers)::pwaf.http_response;
 
 END;$BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100;
-ALTER FUNCTION pwaf.pub_controller_auth_security_oauth2_token(pwaf.http_request)
-  OWNER TO pwaf;
+
+LANGUAGE plpgsql VOLATILE;
+
+ALTER FUNCTION pwaf.pub_controller_security_oauth2_token(pwaf.http_request) OWNER TO pwaf;
 ---

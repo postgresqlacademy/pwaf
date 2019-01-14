@@ -5,7 +5,7 @@ $BODY$
 /**
  * @package PWAF
  * @author Karolis Strumskis (karolis@strumskis.com)
- * @copyright (C) 2013 postgresqlacademy.com and other contributors
+ * @copyright (C) 2013-2019 postgresqlacademy.com and other contributors
  * @license Licensed under the MIT License
  * 
  * @version 0.1
@@ -24,7 +24,8 @@ BEGIN
 	RETURN NULL;
 
 END;$BODY$
-  LANGUAGE plpgsql VOLATILE
-  COST 100;
+
+LANGUAGE plpgsql VOLATILE;
+
 ALTER FUNCTION pwaf.pub_http_request_system_param_get(pwaf.http_request, text) OWNER TO pwaf;
 --
